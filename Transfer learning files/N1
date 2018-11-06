@@ -1,0 +1,10 @@
+alex=alexnet;
+layers=alex.Layers;
+layers(23)=fullyConnectedLayer(2);
+layers(25)=classificationLayer;
+aI=imageDatastore('N1','IncludeSubfolders',true,'LabelSource','foldernames');
+[trI, tI]=splitEachLabel(aI,0.8,'randomize');
+opts=trainingOptions('sgdm','InitialLearnRate',0.001,'MaxEpochs',20,'MiniBatchSize',64,'Plots','training-progress');
+N1=trainNetwork(trI,layers,opts);
+predictedLabels=classify(N1, tI);
+accuracy=mean(predictedLabels==tI.Labels)
